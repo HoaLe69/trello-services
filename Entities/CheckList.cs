@@ -5,7 +5,7 @@
         public Guid checkListId { get; set; }
         public string title { get; set; }
         public Int64 cardId { get; set; }
-        public Card card { get; set; }
+        public Card Card { get; set; }
         public IList<CheckListDetail> CheckListDetails { get; set; }
         public CheckList()
         {

@@ -3,7 +3,7 @@
     public class Label
     {
         public Guid labelId {  get; set; }
-        public string labelName { get; set; }  
+        public string? labelName { get; set; }  
         public string theme { get; set; }
         public Guid boardId { get; set; }
         public Board Board { get; set; }

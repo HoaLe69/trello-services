@@ -6,10 +6,11 @@
         public string title { get; set; }
         public string theme { get; set; }
         public string? description { get; set; }
-        public UserWorkspace UserWorkspace { get; set; }
+        public ICollection<UserWorkspace> UserWorkspaces { get; set; }
         public ICollection<Board> Boards { get; set; }
         public WorkSpace() { 
             Boards = new List<Board>();
+            UserWorkspaces = new List<UserWorkspace>();
         }
     }
 }
