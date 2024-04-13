@@ -7,6 +7,7 @@
         public string email { get; set; }
         public string password { get; set; }
         public string? avatar_path { get; set; }
+        public bool? verify_email { get; set; }
         public IList<UserWorkspace> UserOfWorkspace { get; set; }
         public IList<UserCard> UserCards { get; set; }
         public IList<Activity> Activities { get; set; }
@@ -19,6 +20,7 @@
             UserCards = new List<UserCard>();
             Comments = new List<Comment>();
             UserBoards = new List<UserBoard>();
+            verify_email = false;   
         }
     }
 }

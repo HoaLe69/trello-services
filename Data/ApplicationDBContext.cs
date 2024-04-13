@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 using trello_services.Configuration.Entities;
 using trello_services.Entities;
 
@@ -32,7 +31,7 @@ namespace trello_services.Data
             modelBuilder.Entity<UserWorkspace>(e =>
             {
                 e.ToTable("user_worksapce");
-                e.HasKey(w => w.userWorkSpaceId);
+                e.HasKey(w => new { w.userId , w.workSpaceId});
                 // one to many user
                 e.HasOne(w => w.User)
                     .WithMany(u => u.UserOfWorkspace)
@@ -81,6 +80,8 @@ namespace trello_services.Data
                 e.ToTable("card");
                 e.HasKey(c => c.cardId);
                 e.Property(c => c.description).IsRequired(false);
+                e.Property(c => c.startDate).IsRequired(false);
+                e.Property(c => c.endDate).IsRequired(false);
                 e.Property(c => c.cover).IsRequired(false);
                 // one to many column
                 e.HasOne(c => c.Column)
@@ -101,7 +102,7 @@ namespace trello_services.Data
             //card labels
             modelBuilder.Entity<CardLabel>(e => {
                 e.ToTable("card_label");
-                e.HasKey(cl => cl.cardLabelId);
+                e.HasKey(cl =>new  { cl.cardId, cl.labelId });
                 // one to many label
                 e.HasOne(cl => cl.Label)
                     .WithMany(l => l.CardLabels)
@@ -137,7 +138,7 @@ namespace trello_services.Data
             // user card
             modelBuilder.Entity<UserCard>(e => {
                 e.ToTable("user_card");
-                e.HasKey(uc => uc.userCardId);
+                e.HasKey(uc => new { uc.cardId , uc.userId});
                 // one to many user
                 e.HasOne(uc => uc.User)
                     .WithMany(u => u.UserCards)

@@ -2,7 +2,6 @@
 {
     public class UserBoard
     {
-        public int userBoardId { get; set; }
         public Guid userId { get; set; }
         public Guid boardId { get; set; }
         public Role role { get; set; }

@@ -12,8 +12,8 @@ using trello_services.Data;
 namespace trello_services.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240411100250_initialDbTrello")]
-    partial class initialDbTrello
+    [Migration("20240413040503_initialDb")]
+    partial class initialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,12 @@ namespace trello_services.Migrations
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("startDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -111,21 +117,13 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.CardLabel", b =>
                 {
-                    b.Property<int>("cardLabelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cardLabelId"));
-
                     b.Property<long>("cardId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("labelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("cardLabelId");
-
-                    b.HasIndex("cardId");
+                    b.HasKey("cardId", "labelId");
 
                     b.HasIndex("labelId");
 
@@ -276,6 +274,9 @@ namespace trello_services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("verify_email")
+                        .HasColumnType("bit");
+
                     b.HasKey("userId");
 
                     b.HasIndex("email")
@@ -286,11 +287,8 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.UserBoard", b =>
                 {
-                    b.Property<int>("userBoardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userBoardId"));
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("boardId")
                         .HasColumnType("uniqueidentifier");
@@ -298,35 +296,22 @@ namespace trello_services.Migrations
                     b.Property<int>("role")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("userBoardId");
+                    b.HasKey("userId", "boardId");
 
                     b.HasIndex("boardId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("user_board", (string)null);
                 });
 
             modelBuilder.Entity("trello_services.Entities.UserCard", b =>
                 {
-                    b.Property<long>("userCardId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("userCardId"));
-
                     b.Property<long>("cardId")
                         .HasColumnType("bigint");
 
                     b.Property<Guid>("userId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("userCardId");
-
-                    b.HasIndex("cardId");
+                    b.HasKey("cardId", "userId");
 
                     b.HasIndex("userId");
 
@@ -335,24 +320,16 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.UserWorkspace", b =>
                 {
-                    b.Property<int>("userWorkSpaceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userWorkSpaceId"));
-
-                    b.Property<int>("role")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("userId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("workSpaceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("userWorkSpaceId");
+                    b.Property<int>("role")
+                        .HasColumnType("int");
 
-                    b.HasIndex("userId");
+                    b.HasKey("userId", "workSpaceId");
 
                     b.HasIndex("workSpaceId");
 

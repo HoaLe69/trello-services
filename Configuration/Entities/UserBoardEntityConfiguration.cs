@@ -10,7 +10,7 @@ namespace trello_services.Configuration.Entities
         public void Configure(EntityTypeBuilder<UserBoard> builder)
         {
                 builder.ToTable("user_board");
-                builder.HasKey(ub => ub.userBoardId);
+                builder.HasKey(ub => new {ub.userId , ub.boardId });
                 // one to many board
                 builder.HasOne(ub => ub.Board)
                     .WithMany(b => b.UserBoards)

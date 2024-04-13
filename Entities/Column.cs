@@ -1,4 +1,6 @@
-﻿namespace trello_services.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace trello_services.Entities
 {
     public class Column
     {

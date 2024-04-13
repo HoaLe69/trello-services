@@ -2,11 +2,10 @@
 {
     public enum Role
     {
-        Owner, Member
+        Owner, Member 
     }
     public class UserWorkspace
     {
-        public int userWorkSpaceId { get; set; }
         public Guid workSpaceId { get; set; }
         public Guid userId { get; set; }
         public Role role { get; set; }

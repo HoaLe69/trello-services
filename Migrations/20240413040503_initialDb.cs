@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace trello_services.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDbTrello : Migration
+    public partial class initialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,8 @@ namespace trello_services.Migrations
                     displayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    avatar_path = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    avatar_path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    verify_email = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -65,15 +66,13 @@ namespace trello_services.Migrations
                 name: "user_worksapce",
                 columns: table => new
                 {
-                    userWorkSpaceId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     workSpaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_worksapce", x => x.userWorkSpaceId);
+                    table.PrimaryKey("PK_user_worksapce", x => new { x.userId, x.workSpaceId });
                     table.ForeignKey(
                         name: "FK_user_worksapce_user_userId",
                         column: x => x.userId,
@@ -133,15 +132,13 @@ namespace trello_services.Migrations
                 name: "user_board",
                 columns: table => new
                 {
-                    userBoardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     boardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_board", x => x.userBoardId);
+                    table.PrimaryKey("PK_user_board", x => new { x.userId, x.boardId });
                     table.ForeignKey(
                         name: "FK_user_board_board_boardId",
                         column: x => x.boardId,
@@ -165,7 +162,9 @@ namespace trello_services.Migrations
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     cover = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    columnId = table.Column<long>(type: "bigint", nullable: false)
+                    columnId = table.Column<long>(type: "bigint", nullable: false),
+                    startDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    endDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -210,14 +209,12 @@ namespace trello_services.Migrations
                 name: "card_label",
                 columns: table => new
                 {
-                    cardLabelId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     cardId = table.Column<long>(type: "bigint", nullable: false),
                     labelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_card_label", x => x.cardLabelId);
+                    table.PrimaryKey("PK_card_label", x => new { x.cardId, x.labelId });
                     table.ForeignKey(
                         name: "FK_card_label_card_cardId",
                         column: x => x.cardId,
@@ -283,14 +280,12 @@ namespace trello_services.Migrations
                 name: "user_card",
                 columns: table => new
                 {
-                    userCardId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     cardId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user_card", x => x.userCardId);
+                    table.PrimaryKey("PK_user_card", x => new { x.cardId, x.userId });
                     table.ForeignKey(
                         name: "FK_user_card_card_cardId",
                         column: x => x.cardId,
@@ -347,11 +342,6 @@ namespace trello_services.Migrations
                 column: "columnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_card_label_cardId",
-                table: "card_label",
-                column: "cardId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_card_label_labelId",
                 table: "card_label",
                 column: "labelId");
@@ -398,23 +388,8 @@ namespace trello_services.Migrations
                 column: "boardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_user_board_userId",
-                table: "user_board",
-                column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_user_card_cardId",
-                table: "user_card",
-                column: "cardId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_user_card_userId",
                 table: "user_card",
-                column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_user_worksapce_userId",
-                table: "user_worksapce",
                 column: "userId");
 
             migrationBuilder.CreateIndex(
