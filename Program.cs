@@ -4,12 +4,16 @@ using trello_services.Data;
 using trello_services.IRepository;
 using AutoMapper;
 using trello_services.Services.Implement;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,6 +28,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 // declare repository pattern
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
+builder.Services.AddScoped<IUserOfWorkspaceRepository, UserOfWorkspaceRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

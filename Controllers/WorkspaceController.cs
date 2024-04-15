@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using trello_services.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
 
 namespace trello_services.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/workspace")]
     [ApiController]
     public class WorkspaceController : ControllerBase
     {
@@ -15,20 +13,6 @@ namespace trello_services.Controllers
         public WorkspaceController(IWorkspaceRepository workspaceRepository)
         {
             _workspaceRepository = workspaceRepository;
-        }
-        [HttpGet("{id}/user-workspace")]
-        public async Task<IActionResult> GetAllByUserId(Guid id)
-        {
-            try
-            {
-                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
-                return Ok(await _workspaceRepository.GetAllByUserIdAsync(id));
-
-            }
-            catch
-            {
-                return ResponseHelper.InternalServerError();
-            }
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWorkspaceById(Guid id)
@@ -78,8 +62,7 @@ namespace trello_services.Controllers
             try
             {
                 if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
-                var workspace = await _workspaceRepository.GetWorkspaceByIdAsync(id);
-                _workspaceRepository.DeleteWorkspaceAsync(workspace);
+                  await _workspaceRepository.DeleteWorkspaceAsync(id);
                 return Ok(new {message = "success"});
             }
             catch

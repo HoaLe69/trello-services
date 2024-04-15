@@ -5,10 +5,9 @@ namespace trello_services.IRepository
 {
     public interface IWorkspaceRepository
     {
-        Task<IList<WorkSpace>> GetAllByUserIdAsync(Guid id);
         Task<WorkSpace> CreateWorkspaceAsync(WorkspaceRequestModel request);
         Task<WorkSpace> UpdateWorkspaceAsync(WorkspaceRequestModel request , Guid id);
-        void DeleteWorkspaceAsync(WorkSpace workspace);
+        Task DeleteWorkspaceAsync(Guid workspaceId);
         Task<WorkSpace> GetWorkspaceByIdAsync(Guid id);
     }
 }

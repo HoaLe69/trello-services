@@ -9,9 +9,6 @@ namespace trello_services.Configuration
     {
         public AutoMapperProfile() { 
             CreateMap<User , UserResponseVM>();
-            CreateMap<UserRequestModel, User>()
-                .ForMember(dest => dest.displayName , opt => opt.MapFrom(src => src.displayName))
-                .ForMember(dest => dest.avatar_path , opt => opt.MapFrom(src => src.avatar_path));
         }
     }
 }

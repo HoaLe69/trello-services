@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Writers;
-using Microsoft.VisualBasic;
-using System.Runtime.InteropServices;
 using trello_services.Data;
 using trello_services.Entities;
 using trello_services.IRepository;
@@ -30,13 +27,7 @@ namespace trello_services.Services.Implement
             return workspace;
         }
 
-        public async Task<IList<WorkSpace>> GetAllByUserIdAsync(Guid id)
-        {
-            var workspaces = await _context.Workspaces
-                                            .Include(w => w.UserWorkspaces.Where(uw => uw.userId == id))
-                                            .ToListAsync();
-            return workspaces;  
-        }
+       
 
         public async Task<WorkSpace?> UpdateWorkspaceAsync(WorkspaceRequestModel request , Guid id)
         {
@@ -48,10 +39,11 @@ namespace trello_services.Services.Implement
             await _context.SaveChangesAsync();
             return workspace;
         }
-        public  async void DeleteWorkspaceAsync (WorkSpace workspace)
+        public  async Task DeleteWorkspaceAsync (Guid workspaceId)
         {
+            var workspace  = await _context.Workspaces.FindAsync(workspaceId);
             _context.Workspaces.Remove(workspace);
-            await _context.SaveChangesAsync(true);
+            await _context.SaveChangesAsync();
         }
         public async Task<WorkSpace?> GetWorkspaceByIdAsync (Guid id)
         {
