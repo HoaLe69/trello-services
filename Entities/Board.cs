@@ -6,7 +6,6 @@
         public string title { get; set; }
         public Guid workSpaceId { get; set; }
         public string? orderColumnIds { get; set; }
-        public bool star {  get; set; }
         public IList<Column> Columns { get; set; }
         public IList<Label> Labels { get; set; }
         public WorkSpace WorkSpace { get; set; }
@@ -16,7 +15,6 @@
             Columns = new List<Column>();
             Labels = new List<Label>();
             UserBoards  = new List<UserBoard>();
-            star = false;
         }
     }
 }
