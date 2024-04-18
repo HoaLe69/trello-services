@@ -2,6 +2,7 @@
 using trello_services.Data;
 using trello_services.Entities;
 using trello_services.IRepository;
+using trello_services.Models.Request;
 using trello_services.Models.Response;
 
 namespace trello_services.Services.Implement
@@ -13,11 +14,27 @@ namespace trello_services.Services.Implement
         {
             _context = context;
         }
-        public async Task<UserBoard> AddUserToBoardAsync(UserBoard user)
+
+        public async Task AddBoardToFavouriteListUserAsync(Guid userId, Guid boardId , bool star)
         {
-            await _context.UserBoards.AddAsync(user);
+            var user_board = await _context.UserBoards
+                                   .Where(ub => ub.userId == userId && ub.boardId == boardId)
+                                   .SingleOrDefaultAsync();
+            user_board.star = star;
             await _context.SaveChangesAsync();
-            return user;
+        }
+
+        public async Task<UserBoard> AddUserToBoardAsync(UserBoardRequestModel request)
+        {
+            var user_board = new UserBoard
+            {
+                userId = request.userId,
+                boardId = request.boardId,
+                role = (Role)request.role
+            };
+            await _context.UserBoards.AddAsync(user_board);
+            await _context.SaveChangesAsync();
+            return user_board;
         }
 
         public async Task<IList<UserResponseVM>> GetListUserOfBoardAsync(Guid boardId)
