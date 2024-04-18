@@ -31,6 +31,7 @@ builder.Services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
 builder.Services.AddScoped<IUserOfWorkspaceRepository, UserOfWorkspaceRepository>();
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IUserBoardRepository , UserBoardRepository>();
+builder.Services.AddScoped<IColumnRepository , ColumnRepository>();
 
 var app = builder.Build();
 

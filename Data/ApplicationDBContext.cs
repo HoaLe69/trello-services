@@ -13,7 +13,7 @@ namespace trello_services.Data
         public DbSet<WorkSpace> Workspaces { get; set; }
         public DbSet<Board> Boards { get; set; }
         public DbSet<UserBoard> UserBoards { get; set; }
-        public DbSet<Column> Columns { get; set; }
+        public DbSet<ListCard> Columns { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<Label> Labels { get; set; }
         public DbSet<CardLabel> CardLabels { get; set; }
@@ -64,7 +64,7 @@ namespace trello_services.Data
             // user_board
             modelBuilder.ApplyConfiguration(new UserBoardEntityConfiguration());
             // column
-            modelBuilder.Entity<Column>(e => {
+            modelBuilder.Entity<ListCard>(e => {
                 e.ToTable("column");
                 e.HasKey(c => c.columnId);
                 e.Property(c => c.orderCardIds).IsRequired(false);

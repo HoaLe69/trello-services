@@ -7,7 +7,7 @@
         public string? description { get; set; }
         public string? cover { get; set; }
         public Int64 columnId { get; set; }
-        public Column Column { get; set; }
+        public ListCard Column { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
         public IList<CheckList> CheckLists { get; set; }
