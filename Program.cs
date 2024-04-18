@@ -33,6 +33,7 @@ builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IUserBoardRepository , UserBoardRepository>();
 builder.Services.AddScoped<IColumnRepository , ColumnRepository>();
 builder.Services.AddScoped<ILabelRepository , LabelRepository>();
+builder.Services.AddScoped<ICardLabelRepository , CardLabelRepository>();
 
 var app = builder.Build();
 
