@@ -8,6 +8,6 @@ namespace trello_services.IRepository
     {
         Task<ListCard> CreateNewColumnAsync(ListCardRequestModel request);
         Task<ListCard> UpdateTitleColumnAsync(Int64 id, string title);
-        Task<ListCard> OrderCardInColumnAsync(string id , string cardOrder);
+        Task<ListCard> OrderCardInColumnAsync(string id, string cardOrder);
     }
 }
