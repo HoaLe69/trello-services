@@ -1,4 +1,5 @@
-﻿using trello_services.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using trello_services.Data;
 using trello_services.Entities;
 using trello_services.IRepository;
 using trello_services.Models.Request;
@@ -12,12 +13,6 @@ namespace trello_services.Services.Implement
         {
             _context = context;
         }
-        public async Task AddBoardToFavouriteList(Guid boardId, bool star)
-        {
-            var board = await _context.Boards.FindAsync(boardId);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Board> CreateNewBoardAsync(BoardRequestModel request)
         {
             var board = new Board
@@ -37,6 +32,20 @@ namespace trello_services.Services.Implement
            var board = await _context.Boards.FindAsync(boardId);
             _context.Boards.Remove(board);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IList<Board>> GetAllBoardsByWoskspaceIdAsync(Guid workspaceId)
+        {
+            var boards = await _context.Boards.Include(b => b.WorkSpace)
+                                                .Where(b => b.WorkSpace.workSpaceId == workspaceId)
+                                                .Select(s => new Board { 
+                                                    boardId = s.boardId,
+                                                    workSpaceId = s.workSpaceId,
+                                                    title = s.title,
+                                                    orderColumnIds = s.orderColumnIds,
+                                                })
+                                                .ToListAsync();
+            return boards;
         }
 
         public async Task<string> UpdateTitleBoardAsync(Guid boardId, string title)

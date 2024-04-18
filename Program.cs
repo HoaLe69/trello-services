@@ -29,6 +29,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
 builder.Services.AddScoped<IUserOfWorkspaceRepository, UserOfWorkspaceRepository>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IUserBoardRepository , UserBoardRepository>();
 
 var app = builder.Build();
 

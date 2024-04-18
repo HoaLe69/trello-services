@@ -7,7 +7,7 @@ namespace trello_services.IRepository
     {
         Task<Board> CreateNewBoardAsync(BoardRequestModel request);
         Task<string> UpdateTitleBoardAsync(Guid boardId ,  string title);
-        Task AddBoardToFavouriteList( Guid boardId,bool star);
         Task DeleteBoardAsync(Guid boardId);
+        Task<IList<Board>> GetAllBoardsByWoskspaceIdAsync(Guid workspaceId);
     }
 }
