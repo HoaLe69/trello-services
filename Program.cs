@@ -34,6 +34,8 @@ builder.Services.AddScoped<IUserBoardRepository , UserBoardRepository>();
 builder.Services.AddScoped<IColumnRepository , ColumnRepository>();
 builder.Services.AddScoped<ILabelRepository , LabelRepository>();
 builder.Services.AddScoped<ICardLabelRepository , CardLabelRepository>();
+builder.Services.AddScoped<IChecklistDetailRepository , ChecklistDetailRepository>();
+builder.Services.AddScoped<IChecklistRepository ,  ChecklistRepository>();
 
 var app = builder.Build();
 
