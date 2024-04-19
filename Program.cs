@@ -37,6 +37,7 @@ builder.Services.AddScoped<ICardLabelRepository , CardLabelRepository>();
 builder.Services.AddScoped<IChecklistDetailRepository , ChecklistDetailRepository>();
 builder.Services.AddScoped<IChecklistRepository ,  ChecklistRepository>();
 builder.Services.AddScoped<ICardRepository , CardRepository>();
+builder.Services.AddScoped<IUserCardRepository , UserCardRepository>();
 
 var app = builder.Build();
 
