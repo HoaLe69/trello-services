@@ -6,6 +6,7 @@
         public string title { get; set; }
         public string? description { get; set; }
         public string? cover { get; set; }
+        public bool? isDueDayComplete { get; set; }
         public Int64 columnId { get; set; }
         public ListCard Column { get; set; }
         public DateTime? startDate { get; set; }
@@ -22,6 +23,7 @@
             Activities = new List<Activity>();
             Comments = new List<Comment>();
             CardLabels = new List<CardLabel>();
+            isDueDayComplete = false;
         }
 
     }
