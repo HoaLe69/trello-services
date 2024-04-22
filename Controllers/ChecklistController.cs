@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using trello_services.Helpers;
 using trello_services.IRepository;
 
@@ -6,6 +7,7 @@ namespace trello_services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ChecklistController : ControllerBase
     {
         private readonly IChecklistRepository _repository;

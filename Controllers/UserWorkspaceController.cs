@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System.Linq.Expressions;
-using trello_services.Data;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
 
 namespace trello_services.Controllers
 {
-    [Route("api/userworkspace")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserWorkspaceController : ControllerBase
     {
         private readonly IUserOfWorkspaceRepository _userOfWorkspaceRepository;

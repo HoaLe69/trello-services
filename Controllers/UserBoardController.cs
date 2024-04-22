@@ -1,7 +1,5 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
@@ -9,8 +7,9 @@ using trello_services.Models.Request;
 
 namespace trello_services.Controllers
 {
-    [Route("api/userboard")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserBoardController : ControllerBase
     {
         private readonly IUserBoardRepository _userBoardRepository;

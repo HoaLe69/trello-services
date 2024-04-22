@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using trello_services.Helpers;
 using trello_services.IRepository;
@@ -6,8 +6,9 @@ using trello_services.Models.Request;
 
 namespace trello_services.Controllers
 {
-    [Route("api/card")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CardController : ControllerBase
     {
         private readonly ICardRepository _cardRepository;

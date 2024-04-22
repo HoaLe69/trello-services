@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
 
 namespace trello_services.Controllers
 {
-    [Route("api/user")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -33,24 +35,7 @@ namespace trello_services.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser(UserRequestModel request)
-        {
-            try {
-                if (request.email != null)
-                {
-                    if (await _userRepository.GetUserByEmailAsync(request.email) != null)
-                        return BadRequest(new { message = "Email already exists" });
-                    var user = await _userRepository.CreateNewUserAsync(request);
-                    return Ok(user);
-                }
-                return  BadRequest();
-               
-            }catch (Exception) 
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
+        
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateUser(UserRequestModel request , Guid id)
         {
