@@ -46,7 +46,7 @@ namespace trello_services.Controllers
                 {
                     return Ok(new { Success = true , message = "Register successfully" });
                 }
-                return BadRequest();
+                return BadRequest(new { Success = false , message = "Email already exist" });
 
             }
             catch (Exception)

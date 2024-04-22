@@ -17,6 +17,20 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtOptionsSection = builder.Configuration.GetRequiredSection("Jwt");
 builder.Services.Configure<JwtOptions>(jwtOptionsSection);
 
+// add cors
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials() ;
+        });
+});
+
 
 // Add services to the container.
 
@@ -115,6 +129,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("MyAllowSpecificOrigins");
 
 app.Run();
