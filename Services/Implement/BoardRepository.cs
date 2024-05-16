@@ -20,6 +20,7 @@ namespace trello_services.Services.Implement
                 boardId = Guid.NewGuid(),
                 workSpaceId = (Guid)request.workSpaceId,
                 title = request.title,
+                background = request.background,
                 orderColumnIds =  request.orderColumnIds,
             };
             await _context.Boards.AddAsync(board);
@@ -43,9 +44,19 @@ namespace trello_services.Services.Implement
                                                     workSpaceId = s.workSpaceId,
                                                     title = s.title,
                                                     orderColumnIds = s.orderColumnIds,
+                                                    background = s.background,
                                                 })
                                                 .ToListAsync();
             return boards;
+        }
+
+        public async Task<Board> GetBoardDetailByID(Guid boardId)
+        {
+            var board = await _context.Boards
+                                        .Include(b => b.Columns)
+                                        .Where(b => b.boardId == boardId)
+                                        .SingleOrDefaultAsync();
+            return board;
         }
 
         public async Task<string> UpdateTitleBoardAsync(Guid boardId, string title)

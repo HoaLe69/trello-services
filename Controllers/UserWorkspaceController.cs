@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
+using trello_services.Models.Request;
 
 namespace trello_services.Controllers
 {
@@ -18,14 +19,14 @@ namespace trello_services.Controllers
             _userOfWorkspaceRepository = userOfWorkspaceRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> AddUserToWorkspace(Guid workspaceId, Guid userId , Role? role)
+        public async Task<IActionResult> AddUserToWorkspace(MiddleTableModel reuqest)
         {
             try
             {
-                if (!ValidGuid.IsValidGuid(userId.ToString()) ||
-                    !ValidGuid.IsValidGuid(workspaceId.ToString())) 
+                if (!ValidGuid.IsValidGuid(reuqest.userId.ToString()) ||
+                    !ValidGuid.IsValidGuid(reuqest.workspaceId.ToString())) 
                         return BadRequest();
-                var user_of_workspace = await _userOfWorkspaceRepository.AddUserToWorkSpaceAsync(workspaceId, userId , role);
+                var user_of_workspace = await _userOfWorkspaceRepository.AddUserToWorkSpaceAsync(reuqest.workspaceId, reuqest.userId , reuqest.role);
                 return Ok(user_of_workspace);
             }
             catch
@@ -39,8 +40,8 @@ namespace trello_services.Controllers
             try
             {
                 if (!ValidGuid.IsValidGuid(userId.ToString())) return BadRequest();
-                var worksapce = await _userOfWorkspaceRepository.GetWorkSpaceOfUserByUserIdAsync(userId);
-                return Ok(worksapce);
+                var worksapces = await _userOfWorkspaceRepository.GetWorkSpaceOfUserByUserIdAsync(userId);
+                return Ok(new {success = true , data = worksapces});
             }
             catch
             {

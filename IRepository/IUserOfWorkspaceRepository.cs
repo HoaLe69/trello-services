@@ -10,7 +10,7 @@ namespace trello_services.IRepository
         Task RemoveUserFromWorkSpaceAsync(Guid userId , Guid workspaceId);
         Task<UserWorkspace> UpdateRoleOfUserAsync(Guid userId , Guid workspaceId , Role role);
         Task<UserWorkspace> FindByUserAndWorkspaceIdAsync(Guid userId , Guid workspaceId);
-        Task<ICollection<UserWorkspace>> GetWorkSpaceOfUserByUserIdAsync(Guid userId);
+        Task<ICollection<WorkspaceResponseModel>> GetWorkSpaceOfUserByUserIdAsync(Guid userId);
         Task<IList<UserResponseVM>> GetMemberOfWorkspaceByWorkspaceIdAsync(Guid workspaceId);
     }
 }

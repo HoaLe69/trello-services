@@ -30,10 +30,20 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
+        [HttpGet("{workspaceId}/detail")]
+       public async Task<IActionResult> GetWorkSpaceDetailById (Guid workspaceId) 
+        {
+          
+                if (!ValidGuid.IsValidGuid(workspaceId.ToString())) return BadRequest();
+                var boards = await _workspaceRepository.GetBoardsByWorkspaceId(workspaceId);
+                return Ok(new { success = true , data = boards}) ;
+           
+        }
         [HttpPost]
         public async Task<IActionResult> CreateNewWorkSpace(WorkspaceRequestModel request) {
             try
             {
+                Console.WriteLine(request);
                 if (request == null)
                     return BadRequest(new { message = "Invalid Output" });
                 var workspace = await _workspaceRepository.CreateWorkspaceAsync(request);

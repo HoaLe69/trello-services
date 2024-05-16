@@ -28,7 +28,7 @@ namespace trello_services.Controllers
                     return BadRequest(new { Success = false, message = "Invalid email or password" });
                 }
                 var access_token = _tokenService.GenerateToken(user);
-                return Ok(new { Success = true , Access_token = access_token});
+                return Ok(new { Success = true , Access_token = access_token , current_user = user});
             }
             catch
             {

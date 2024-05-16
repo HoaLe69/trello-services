@@ -29,6 +29,20 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
+        [HttpGet("{id}/detail")]
+        public async Task<IActionResult> GetDetailBoardById (Guid id)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
+                var board = await _boardRepository.GetBoardDetailByID(id);
+                return Ok(new {success = true , data = board});
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        } 
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateBoard(Guid id , string title)
         {
@@ -56,14 +70,14 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
-        [HttpGet("{workspaceId}")]
+        [HttpGet("{workspaceId}/list")]
         public async Task<IActionResult> GetAllBoardByWorkspaceId (Guid workspaceId)
         {
             try
             {
                 if (!ValidGuid.IsValidGuid(workspaceId.ToString())) return BadRequest();
                 var boards  = await _boardRepository.GetAllBoardsByWoskspaceIdAsync(workspaceId);
-                return Ok(boards);
+                return Ok(new {success = true , data = boards});
             }
             catch
             {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using trello_services.Data;
 using trello_services.Entities;
 using trello_services.IRepository;
@@ -58,11 +57,19 @@ namespace trello_services.Services.Implement
             return user_workspace;
         }
 
-        public async Task<ICollection<UserWorkspace>> GetWorkSpaceOfUserByUserIdAsync(Guid userId)
+        public async Task<ICollection<WorkspaceResponseModel>> GetWorkSpaceOfUserByUserIdAsync(Guid userId)
         {
             var workspace = await _context.UserWorkspaces
                                 .Include(w => w.WorkSpace)
-                                .Where(uw => uw.userId == userId).ToListAsync();
+                                .Where(uw => uw.userId == userId)
+                                .Select(s => new WorkspaceResponseModel
+                                {
+                                    workSpaceId = s.workSpaceId,
+                                    title = s.WorkSpace.title,
+                                    theme = s.WorkSpace.theme,
+                                    description = s.WorkSpace.description,
+                                })
+                                .ToListAsync();
             return workspace;
         }
 

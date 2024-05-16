@@ -50,5 +50,14 @@ namespace trello_services.Services.Implement
             var workspace = await _context.Workspaces.FindAsync(id);
             return workspace;
         }
+
+        public async Task<WorkSpace> GetBoardsByWorkspaceId(Guid workspaceId)
+        {
+            var workspace = await _context.Workspaces.Include(w => w.Boards)
+                                                      .Where(w => w.workSpaceId == workspaceId)
+                                                      .SingleOrDefaultAsync();
+                                                      
+            return workspace;
+        }   
     }
 }

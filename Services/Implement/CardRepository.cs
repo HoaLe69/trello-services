@@ -1,23 +1,28 @@
-﻿using trello_services.Data;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using trello_services.Data;
 using trello_services.Entities;
 using trello_services.IRepository;
 using trello_services.Models.Request;
+using trello_services.Models.Response;
 
 namespace trello_services.Services.Implement
 {
     public class CardRepository : ICardRepository
     {
         private readonly ApplicationDBContext _context;
-        public CardRepository(ApplicationDBContext context)
+        private readonly IMapper _mapper;
+        public CardRepository(ApplicationDBContext context , IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<Card> FindCardAsync(long id)
         {
             var card = await _context.Cards.FindAsync(id);
             return card;
         }
-        public async Task<Card> CreateNewCardAsync(CardRequestModel request)
+        public async Task<CardResponseVM> CreateNewCardAsync(CardRequestModel request)
         {
             var card = new Card
             {
@@ -26,7 +31,7 @@ namespace trello_services.Services.Implement
             };
             await _context.Cards.AddAsync(card);
             await _context.SaveChangesAsync();
-            return card;
+            return _mapper.Map<CardResponseVM>(card);
         }
 
         public async Task MarkDueDateCompleteOrNotAsync(bool isDueDateComplete, long cardId)
@@ -70,6 +75,20 @@ namespace trello_services.Services.Implement
             if (endDate != null) card.endDate = endDate;
             await _context.SaveChangesAsync();
             return card ;
+        }
+
+        public async Task<IList<CardResponseVM>> GetListCardByListIdAsync(long listId)
+        {
+            var cards = await _context.Cards
+                                       .Include(c => c.Column)
+                                       .Where(c => c.Column.columnId == listId)
+                                       .ToArrayAsync();
+            List<CardResponseVM> cards_vm = new List<CardResponseVM>();
+            foreach (var card in cards)
+            {
+                cards_vm.Add(_mapper.Map<CardResponseVM>(card));
+            }
+            return cards_vm;
         }
     }
 }

@@ -9,5 +9,6 @@ namespace trello_services.IRepository
         Task<string> UpdateTitleBoardAsync(Guid boardId ,  string title);
         Task DeleteBoardAsync(Guid boardId);
         Task<IList<Board>> GetAllBoardsByWoskspaceIdAsync(Guid workspaceId);
+        Task<Board> GetBoardDetailByID(Guid boardId);
     }
 }

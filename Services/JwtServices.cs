@@ -27,7 +27,7 @@ public class JwtServices : IJwtServices
         var key = Encoding.UTF8.GetBytes(_jwtOptions.Key);
         var tokenDescriptor = new SecurityTokenDescriptor {
             Subject = new ClaimsIdentity(new[] { new Claim("email", user.email) }),
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddDays(20),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key) , SecurityAlgorithms.HmacSha256Signature)
         };
         var tokenHandler = new JwtSecurityTokenHandler();

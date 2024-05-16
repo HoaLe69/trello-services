@@ -5,6 +5,7 @@
         public Guid boardId { get; set; }
         public string title { get; set; }
         public Guid workSpaceId { get; set; }
+        public string? background { get; set; }
         public string? orderColumnIds { get; set; }
         public IList<ListCard> Columns { get; set; }
         public IList<Label> Labels { get; set; }

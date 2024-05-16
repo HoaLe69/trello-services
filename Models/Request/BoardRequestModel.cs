@@ -4,6 +4,7 @@
     {
         public string title { get; set; }
         public Guid? workSpaceId { get; set; }
+        public string? background { get; set; }
         public string? orderColumnIds { get; set; }
     }
 }

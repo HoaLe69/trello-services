@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using trello_services.Entities;
-using trello_services.Models.Request;
 using trello_services.Models.Response;
 
 namespace trello_services.Configuration
@@ -9,6 +8,7 @@ namespace trello_services.Configuration
     {
         public AutoMapperProfile() { 
             CreateMap<User , UserResponseVM>();
+            CreateMap<Card , CardResponseVM>();
         }
     }
 }

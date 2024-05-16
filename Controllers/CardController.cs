@@ -29,6 +29,15 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
+        [HttpGet("{id}/list")]
+        public async Task<IActionResult> GetListCardByListId (Int64 id)
+        {
+           
+                var cards = await _cardRepository.GetListCardByListIdAsync(id);
+                return Ok(new { success = true, data = cards });
+           
+
+        }
         [HttpPatch("{cardId}/mark-complete-dueday")]
         public async Task<IActionResult> MakeCompleteDueDay(Int64 cardId , bool isComplete)
         {
