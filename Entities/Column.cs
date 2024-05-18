@@ -2,7 +2,7 @@
 {
     public class ListCard
     {
-        public Int64 columnId { get; set; }
+        public Guid columnId { get; set; }
         public string title { get; set; }
         public string? orderCardIds { get; set; }
         public Guid boardId { get; set; }

@@ -34,6 +34,20 @@ namespace trello_services.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);       
             }
         }
+        [HttpGet("{email}/search")]
+        public async Task<IActionResult> SearchUser(string email)
+        {
+            try
+            {
+                if (email == null) return NoContent();
+                var users = await _userRepository.SearchUserAsync(email);
+                return Ok(new {success = true , data = users});
+             }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         
         [HttpPatch("{id}")]

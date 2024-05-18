@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
@@ -30,19 +31,27 @@ namespace trello_services.Controllers
             }
         }
         [HttpGet("{id}/list")]
-        public async Task<IActionResult> GetListCardByListId (Int64 id)
-        {
-           
-                var cards = await _cardRepository.GetListCardByListIdAsync(id);
-                return Ok(new { success = true, data = cards });
-           
-
-        }
-        [HttpPatch("{cardId}/mark-complete-dueday")]
-        public async Task<IActionResult> MakeCompleteDueDay(Int64 cardId , bool isComplete)
+        public async Task<IActionResult> GetListCardByListId (Guid id)
         {
             try
             {
+                if (!ValidGuid.IsValidGuid(id.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
+                var cards = await _cardRepository.GetListCardByListIdAsync(id);
+                return Ok(new { success = true, data = cards });
+            }
+            catch {
+                return ResponseHelper.InternalServerError();
+            }
+              
+        }
+        [HttpPatch("{cardId}/mark-complete-dueday")]
+        public async Task<IActionResult> MakeCompleteDueDay(Guid cardId , bool isComplete)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(cardId.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
                 var card = await _cardRepository.FindCardAsync(cardId);
                 if (card == null) return BadRequest();
                 await _cardRepository.MarkDueDateCompleteOrNotAsync(isComplete , cardId);
@@ -54,11 +63,13 @@ namespace trello_services.Controllers
             }
         }
         [HttpPatch("{cardId}/remove-daytime")]
-        public async Task<IActionResult> RemoveDayTimeCard(Int64 cardId)
+        public async Task<IActionResult> RemoveDayTimeCard(Guid cardId)
         {
             try
             {
-               var card =  await _cardRepository.RemoveTimeOfCardAsync(cardId);
+                if (!ValidGuid.IsValidGuid(cardId.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
+                var card =  await _cardRepository.RemoveTimeOfCardAsync(cardId);
                 if (card == null) return BadRequest();
                 return NoContent();
             }
@@ -68,10 +79,12 @@ namespace trello_services.Controllers
             }
         }
         [HttpPut("{cardId}/update-infor-card")]
-        public async Task<IActionResult> UpdateInforCard(Int64 cardId , CardRequestModel request)
+        public async Task<IActionResult> UpdateInforCard(Guid cardId , CardRequestModel request)
         {
             try
             {
+                if (!ValidGuid.IsValidGuid(cardId.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
                 var card = await _cardRepository.UpdateCardAsync(request , cardId);
                 if (card == null) return BadRequest();
                 return NoContent();
@@ -82,10 +95,12 @@ namespace trello_services.Controllers
             }
         }
         [HttpPatch("{cardId}/update-time")]
-        public async Task<IActionResult> UpdateTimeOfCard(DateTime? starDate, DateTime? endDate, Int64 cardId)
+        public async Task<IActionResult> UpdateTimeOfCard(DateTime? starDate, DateTime? endDate, Guid cardId)
         {
             try
             {
+                if (!ValidGuid.IsValidGuid(cardId.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
                 var card = await _cardRepository.UpdateTimeOfCardAsync(starDate, endDate, cardId);
                 if (card == null) return BadRequest();
                 return NoContent();

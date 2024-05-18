@@ -24,7 +24,7 @@ namespace trello_services.Controllers
             {
                 var user = await _auth.AuthenticatedAsync(request);
                 if (user == null)
-                {
+                { 
                     return BadRequest(new { Success = false, message = "Invalid email or password" });
                 }
                 var access_token = _tokenService.GenerateToken(user);

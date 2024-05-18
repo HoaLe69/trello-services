@@ -2,7 +2,7 @@
 {
     public class CardResponseVM
     {
-        public Int64 cardId { get; set; }
+        public Guid cardId { get; set; }
         public string title { get; set; }
         public string? description { get; set; }
         public string? cover { get; set; }

@@ -34,10 +34,11 @@ namespace trello_services.Controllers
             }
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateTitleColumn (Int64 id , string title)
+        public async Task<IActionResult> UpdateTitleColumn (Guid id , string title)
         {
             try
             {
+                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
                 if (title == null) return BadRequest();
                 await _columnRepository.UpdateTitleColumnAsync(id, title);
                 return NoContent();

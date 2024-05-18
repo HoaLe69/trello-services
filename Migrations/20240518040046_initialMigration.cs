@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace trello_services.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,8 +48,8 @@ namespace trello_services.Migrations
                     boardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     workSpaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    orderColumnIds = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    star = table.Column<bool>(type: "bit", nullable: false)
+                    background = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    orderColumnIds = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace trello_services.Migrations
                 {
                     workSpaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    role = table.Column<int>(type: "int", nullable: false)
+                    role = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,8 +91,7 @@ namespace trello_services.Migrations
                 name: "column",
                 columns: table => new
                 {
-                    columnId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    columnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     orderCardIds = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     boardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -134,6 +133,7 @@ namespace trello_services.Migrations
                 {
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     boardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    star = table.Column<bool>(type: "bit", nullable: false),
                     role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -157,12 +157,12 @@ namespace trello_services.Migrations
                 name: "card",
                 columns: table => new
                 {
-                    cardId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     cover = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    columnId = table.Column<long>(type: "bigint", nullable: false),
+                    isDueDayComplete = table.Column<bool>(type: "bit", nullable: true),
+                    columnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     startDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     endDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -185,7 +185,7 @@ namespace trello_services.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     createAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    cardId = table.Column<long>(type: "bigint", nullable: false),
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -209,7 +209,7 @@ namespace trello_services.Migrations
                 name: "card_label",
                 columns: table => new
                 {
-                    cardId = table.Column<long>(type: "bigint", nullable: false),
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     labelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -235,7 +235,7 @@ namespace trello_services.Migrations
                 {
                     checkListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    cardId = table.Column<long>(type: "bigint", nullable: false)
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -256,7 +256,7 @@ namespace trello_services.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    cardId = table.Column<long>(type: "bigint", nullable: false),
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     createAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -281,7 +281,7 @@ namespace trello_services.Migrations
                 columns: table => new
                 {
                     userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    cardId = table.Column<long>(type: "bigint", nullable: false)
+                    cardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

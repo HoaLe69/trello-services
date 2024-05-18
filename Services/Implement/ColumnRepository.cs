@@ -16,6 +16,7 @@ namespace trello_services.Services.Implement
         {
             var column = new ListCard
             {
+                columnId = Guid.NewGuid(),
                 title = request.title,
                 boardId  = request.boardId,
             };
@@ -29,7 +30,7 @@ namespace trello_services.Services.Implement
             throw new NotImplementedException();
         }
 
-        public async Task<ListCard> UpdateTitleColumnAsync(Int64 id, string title)
+        public async Task<ListCard> UpdateTitleColumnAsync(Guid id, string title)
         {
             var column = await _context.Columns.FindAsync(id);
             if (column == null) return null;

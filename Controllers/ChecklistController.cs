@@ -16,7 +16,7 @@ namespace trello_services.Controllers
             _repository = repository;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateChecklist(Int64 cardId , string name)
+        public async Task<IActionResult> CreateChecklist(Guid cardId , string name)
         {
             try
             {

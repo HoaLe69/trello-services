@@ -6,7 +6,7 @@ namespace trello_services.IRepository
 {
     public interface IUserBoardRepository
     {
-        Task<UserBoard> AddUserToBoardAsync(UserBoardRequestModel user);
+        Task<UserResponseVM> AddUserToBoardAsync(UserBoardRequestModel user);
         Task<UserBoard> UpdateRoleOfUserAsync(Guid userId, Guid boardId, Role? role);
         Task RemoveUserFromBoardAsync(Guid userId, Guid boardId);
         Task<IList<UserResponseVM>> GetListUserOfBoardAsync(Guid boardId);

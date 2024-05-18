@@ -68,6 +68,18 @@ namespace trello_services.Services.Implement
             return _mapper.Map<UserResponseVM>(user);
         }
 
-      
+        public async Task<IList<UserResponseVM>> SearchUserAsync(string email)
+        {
+            string keyword = $"{email[0]}%";
+            var users = await _context.Users
+                                   .Where(e => EF.Functions.Like(e.email, keyword))
+                                   .ToListAsync();
+            List<UserResponseVM> _users = new List<UserResponseVM>();
+            foreach (var user in users)
+            {
+                _users.Add(_mapper.Map<UserResponseVM>(user));
+            }
+            return _users;
+        }
     }
 }

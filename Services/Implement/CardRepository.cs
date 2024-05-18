@@ -17,7 +17,7 @@ namespace trello_services.Services.Implement
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Card> FindCardAsync(long id)
+        public async Task<Card> FindCardAsync(Guid id)
         {
             var card = await _context.Cards.FindAsync(id);
             return card;
@@ -26,15 +26,16 @@ namespace trello_services.Services.Implement
         {
             var card = new Card
             {
+                cardId = Guid.NewGuid(),
                 title = request.title,
-                columnId = (long)request.columnId
+                columnId = (Guid)request.columnId,
             };
             await _context.Cards.AddAsync(card);
             await _context.SaveChangesAsync();
             return _mapper.Map<CardResponseVM>(card);
         }
 
-        public async Task MarkDueDateCompleteOrNotAsync(bool isDueDateComplete, long cardId)
+        public async Task MarkDueDateCompleteOrNotAsync(bool isDueDateComplete, Guid cardId)
         {
             var card = await FindCardAsync(cardId);
             if (card != null)
@@ -44,7 +45,7 @@ namespace trello_services.Services.Implement
             }
         }
 
-        public async Task<Card> RemoveTimeOfCardAsync(long cardId)
+        public async Task<Card> RemoveTimeOfCardAsync(Guid cardId)
         {
             var card = await FindCardAsync(cardId);
             if (card == null) return null;
@@ -55,19 +56,19 @@ namespace trello_services.Services.Implement
             return card;
         }
 
-        public async Task<Card> UpdateCardAsync(CardRequestModel request , long cardId)
+        public async Task<Card> UpdateCardAsync(CardRequestModel request , Guid cardId)
         {
             var card = await FindCardAsync(cardId);
             if (card == null) return null;
             if (request.title != null) card.title = request.title;
             if (request.description != null) card.description = request.description;
             if (request.cover != null) card.cover = request.cover;
-            if (request.columnId != null) card.columnId = (long)request.columnId;
+            if (request.columnId != null) card.columnId = (Guid)request.columnId;
             await _context.SaveChangesAsync();
             return card;
         }
 
-        public async Task<Card> UpdateTimeOfCardAsync(DateTime? starDate, DateTime? endDate, long cardId)
+        public async Task<Card> UpdateTimeOfCardAsync(DateTime? starDate, DateTime? endDate, Guid cardId)
         {
             var card = await FindCardAsync(cardId);
             if (card == null) return null;
@@ -77,7 +78,7 @@ namespace trello_services.Services.Implement
             return card ;
         }
 
-        public async Task<IList<CardResponseVM>> GetListCardByListIdAsync(long listId)
+        public async Task<IList<CardResponseVM>> GetListCardByListIdAsync(Guid listId)
         {
             var cards = await _context.Cards
                                        .Include(c => c.Column)

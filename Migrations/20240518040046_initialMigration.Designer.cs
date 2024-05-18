@@ -12,8 +12,8 @@ using trello_services.Data;
 namespace trello_services.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240413040503_initialDb")]
-    partial class initialDb
+    [Migration("20240518040046_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,8 @@ namespace trello_services.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("activityId"));
 
-                    b.Property<long>("cardId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("cardId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("content")
                         .IsRequired()
@@ -61,11 +61,11 @@ namespace trello_services.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("orderColumnIds")
+                    b.Property<string>("background")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("star")
-                        .HasColumnType("bit");
+                    b.Property<string>("orderColumnIds")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("title")
                         .IsRequired()
@@ -83,14 +83,12 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.Card", b =>
                 {
-                    b.Property<long>("cardId")
+                    b.Property<Guid>("cardId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("cardId"));
-
-                    b.Property<long>("columnId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("columnId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("cover")
                         .HasColumnType("nvarchar(max)");
@@ -100,6 +98,9 @@ namespace trello_services.Migrations
 
                     b.Property<DateTime?>("endDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool?>("isDueDayComplete")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("startDate")
                         .HasColumnType("datetime2");
@@ -117,8 +118,8 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.CardLabel", b =>
                 {
-                    b.Property<long>("cardId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("cardId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("labelId")
                         .HasColumnType("uniqueidentifier");
@@ -136,8 +137,8 @@ namespace trello_services.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("cardId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("cardId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("title")
                         .IsRequired()
@@ -175,31 +176,6 @@ namespace trello_services.Migrations
                     b.ToTable("check_list_detail", (string)null);
                 });
 
-            modelBuilder.Entity("trello_services.Entities.Column", b =>
-                {
-                    b.Property<long>("columnId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("columnId"));
-
-                    b.Property<Guid>("boardId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("orderCardIds")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("columnId");
-
-                    b.HasIndex("boardId");
-
-                    b.ToTable("column", (string)null);
-                });
-
             modelBuilder.Entity("trello_services.Entities.Comment", b =>
                 {
                     b.Property<long>("commentId")
@@ -208,8 +184,8 @@ namespace trello_services.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("commentId"));
 
-                    b.Property<long>("cardId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("cardId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("content")
                         .IsRequired()
@@ -251,6 +227,29 @@ namespace trello_services.Migrations
                     b.HasIndex("boardId");
 
                     b.ToTable("label", (string)null);
+                });
+
+            modelBuilder.Entity("trello_services.Entities.ListCard", b =>
+                {
+                    b.Property<Guid>("columnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("boardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("orderCardIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("columnId");
+
+                    b.HasIndex("boardId");
+
+                    b.ToTable("column", (string)null);
                 });
 
             modelBuilder.Entity("trello_services.Entities.User", b =>
@@ -296,6 +295,9 @@ namespace trello_services.Migrations
                     b.Property<int>("role")
                         .HasColumnType("int");
 
+                    b.Property<bool>("star")
+                        .HasColumnType("bit");
+
                     b.HasKey("userId", "boardId");
 
                     b.HasIndex("boardId");
@@ -305,8 +307,8 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.UserCard", b =>
                 {
-                    b.Property<long>("cardId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid>("cardId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("userId")
                         .HasColumnType("uniqueidentifier");
@@ -326,7 +328,7 @@ namespace trello_services.Migrations
                     b.Property<Guid>("workSpaceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("role")
+                    b.Property<int?>("role")
                         .HasColumnType("int");
 
                     b.HasKey("userId", "workSpaceId");
@@ -390,7 +392,7 @@ namespace trello_services.Migrations
 
             modelBuilder.Entity("trello_services.Entities.Card", b =>
                 {
-                    b.HasOne("trello_services.Entities.Column", "Column")
+                    b.HasOne("trello_services.Entities.ListCard", "Column")
                         .WithMany("Cards")
                         .HasForeignKey("columnId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -440,17 +442,6 @@ namespace trello_services.Migrations
                     b.Navigation("CheckList");
                 });
 
-            modelBuilder.Entity("trello_services.Entities.Column", b =>
-                {
-                    b.HasOne("trello_services.Entities.Board", "Board")
-                        .WithMany("Columns")
-                        .HasForeignKey("boardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Board");
-                });
-
             modelBuilder.Entity("trello_services.Entities.Comment", b =>
                 {
                     b.HasOne("trello_services.Entities.Card", "Card")
@@ -474,6 +465,17 @@ namespace trello_services.Migrations
                 {
                     b.HasOne("trello_services.Entities.Board", "Board")
                         .WithMany("Labels")
+                        .HasForeignKey("boardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Board");
+                });
+
+            modelBuilder.Entity("trello_services.Entities.ListCard", b =>
+                {
+                    b.HasOne("trello_services.Entities.Board", "Board")
+                        .WithMany("Columns")
                         .HasForeignKey("boardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -565,14 +567,14 @@ namespace trello_services.Migrations
                     b.Navigation("CheckListDetails");
                 });
 
-            modelBuilder.Entity("trello_services.Entities.Column", b =>
-                {
-                    b.Navigation("Cards");
-                });
-
             modelBuilder.Entity("trello_services.Entities.Label", b =>
                 {
                     b.Navigation("CardLabels");
+                });
+
+            modelBuilder.Entity("trello_services.Entities.ListCard", b =>
+                {
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("trello_services.Entities.User", b =>

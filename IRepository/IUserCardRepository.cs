@@ -5,8 +5,8 @@ namespace trello_services.IRepository
 {
     public interface IUserCardRepository
     {
-        Task<UserCard> AddUserToCardAsync(Guid userId , Int64 cardId);
-        Task RemoveUserFromCardAsync(Guid userId, Int64 cardId);
+        Task<UserCard> AddUserToCardAsync(Guid userId , Guid cardId);
+        Task RemoveUserFromCardAsync(Guid userId, Guid cardId);
         Task<IList<UserResponseVM>> GetListUserInCardAsync(Guid userId);
     }
 }

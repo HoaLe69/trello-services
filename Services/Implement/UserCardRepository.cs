@@ -13,7 +13,7 @@ namespace trello_services.Services.Implement
         {
             _context = context;
         }
-        public async Task<UserCard> AddUserToCardAsync(Guid userId, long cardId)
+        public async Task<UserCard> AddUserToCardAsync(Guid userId, Guid cardId)
         {
             var user_card = new UserCard
             {
@@ -41,7 +41,7 @@ namespace trello_services.Services.Implement
             return user_card;
         }
 
-        public async Task RemoveUserFromCardAsync(Guid userId, long cardId)
+        public async Task RemoveUserFromCardAsync(Guid userId, Guid cardId)
         {
             var user_card = await _context.UserCards.Where(uc => uc.userId == userId && uc.cardId == cardId)
                                                     .SingleOrDefaultAsync();

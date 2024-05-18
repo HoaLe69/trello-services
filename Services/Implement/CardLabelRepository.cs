@@ -11,7 +11,7 @@ namespace trello_services.Services.Implement
         public CardLabelRepository(ApplicationDBContext context) {
             _context = context;
         }
-        public async Task<CardLabel> AddLabelToCardAsync(long cardId, Guid labelId)
+        public async Task<CardLabel> AddLabelToCardAsync(Guid cardId, Guid labelId)
         {
             var card_label = new CardLabel
             {
@@ -24,7 +24,7 @@ namespace trello_services.Services.Implement
             
         }
 
-        public async Task<IList<CardLabel>> GetAllLabelInCardByCardIdAsync(long cardId)
+        public async Task<IList<CardLabel>> GetAllLabelInCardByCardIdAsync(Guid cardId)
         {
             var labels = await _context.CardLabels.Include(cl => cl.Card)
                                                     .Where(cl => cl.cardId == cardId)
@@ -32,7 +32,7 @@ namespace trello_services.Services.Implement
             return labels;
         }
 
-        public async Task RemoveLabelFromCardAsync(long cardId, Guid labelId)
+        public async Task RemoveLabelFromCardAsync(Guid cardId, Guid labelId)
         {
             var card_label = await _context.CardLabels.Where(cl => cl.cardId == cardId && cl.labelId == labelId)
                                                         .SingleOrDefaultAsync();

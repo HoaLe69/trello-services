@@ -15,7 +15,7 @@ namespace trello_services.Controllers
             _userCardRepository = userCardRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> AddUserToCard(Guid userId , Int64 cardId)
+        public async Task<IActionResult> AddUserToCard(Guid userId , Guid cardId)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace trello_services.Controllers
             }
         }
         [HttpDelete("{userId}/{cardId}")]
-        public async Task<IActionResult> RemoveUserFromCard(Guid userId, Int64 cardId)
+        public async Task<IActionResult> RemoveUserFromCard(Guid userId, Guid cardId)
         {
             try
             {

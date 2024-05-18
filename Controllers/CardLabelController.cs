@@ -16,7 +16,7 @@ namespace trello_services.Controllers
             _cardLabelRepository = cardLabelRepository;
         }
         [HttpGet("{cardId}")]
-        public async Task<IActionResult> GetListLabelInCard(Int64 cardId)
+        public async Task<IActionResult> GetListLabelInCard(Guid cardId)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace trello_services.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddLabelInCard (Int64 cardId , Guid labelId)
+        public async Task<IActionResult> AddLabelInCard (Guid cardId , Guid labelId)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace trello_services.Controllers
             }
         }
         [HttpDelete("{cardId}/{labelId}")]
-        public async Task<IActionResult> RemoveLabelFromCard (Int64 cardId , Guid labelId)
+        public async Task<IActionResult> RemoveLabelFromCard (Guid cardId , Guid labelId)
         {
             try
             {

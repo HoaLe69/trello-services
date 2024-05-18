@@ -10,5 +10,6 @@ namespace trello_services.IRepository
         Task<UserResponseVM> GetUserByEmailAsync(string email);
         Task<List<UserResponseVM>> GetByListIdAsync(Guid[] ids);
         Task<UserResponseVM> CreateNewUserAsync(UserRequestModel request);
+        Task<IList<UserResponseVM>> SearchUserAsync(string email);
     }
 }

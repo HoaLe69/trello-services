@@ -24,7 +24,7 @@ namespace trello_services.Services.Implement
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserBoard> AddUserToBoardAsync(UserBoardRequestModel request)
+        public async Task<UserResponseVM> AddUserToBoardAsync(UserBoardRequestModel request)
         {
             var user_board = new UserBoard
             {
@@ -34,7 +34,14 @@ namespace trello_services.Services.Implement
             };
             await _context.UserBoards.AddAsync(user_board);
             await _context.SaveChangesAsync();
-            return user_board;
+            var user = await _context.Users.FindAsync(request.userId);
+            return new UserResponseVM
+            {
+                userId = user.userId,
+                displayName = user.displayName,
+                avatar_path = user.avatar_path,
+                email = user.email
+            };
         }
 
         public async Task<IList<UserResponseVM>> GetListUserOfBoardAsync(Guid boardId)

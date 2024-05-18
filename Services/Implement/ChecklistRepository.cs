@@ -11,7 +11,7 @@ namespace trello_services.Services.Implement
         {
             _context = context;
         }
-        public async Task<CheckList> CreateCheckListAsync(string name, long cardId)
+        public async Task<CheckList> CreateCheckListAsync(string name, Guid cardId)
         {
             var checklist = new CheckList {
                 checkListId = Guid.NewGuid(),

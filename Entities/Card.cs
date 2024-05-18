@@ -2,12 +2,12 @@
 {
     public class Card
     {
-        public Int64 cardId { get; set; }
+        public Guid cardId { get; set; }
         public string title { get; set; }
         public string? description { get; set; }
         public string? cover { get; set; }
         public bool? isDueDayComplete { get; set; }
-        public Int64 columnId { get; set; }
+        public Guid columnId { get; set; }
         public ListCard Column { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }

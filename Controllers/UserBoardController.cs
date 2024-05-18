@@ -46,7 +46,7 @@ namespace trello_services.Controllers
                         ValidGuid.IsValidGuid(request.boardId.ToString())))
                             return BadRequest();
                     var user = await _userBoardRepository.AddUserToBoardAsync(request);
-                    return Ok(user);
+                    return Ok(new { success = true , data = user});
                 
             }
             catch
