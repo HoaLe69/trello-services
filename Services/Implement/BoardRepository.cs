@@ -59,10 +59,18 @@ namespace trello_services.Services.Implement
             return board;
         }
 
-        public async Task<string> UpdateTitleBoardAsync(Guid boardId, string title)
+        public async Task UpdateOrderColumnInBoard(Guid boardId, BoardRequestModel request)
         {
             var board = await _context.Boards.FindAsync(boardId);
-            board.title = title;
+            if (board == null) return;
+            board.orderColumnIds = request.orderColumnIds;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<string> UpdateTitleBoardAsync(Guid boardId, BoardRequestModel request)
+        {
+            var board = await _context.Boards.FindAsync(boardId);
+            board.title = request.title;
             await _context.SaveChangesAsync();
             return board.title;
         }

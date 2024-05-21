@@ -18,16 +18,19 @@ namespace trello_services.Services.Implement
             {
                 columnId = Guid.NewGuid(),
                 title = request.title,
-                boardId  = request.boardId,
+                boardId  = (Guid)request.boardId,
             };
             await _context.Columns.AddAsync(column);
             await _context.SaveChangesAsync();
             return column;
         }
 
-        public Task<ListCard> OrderCardInColumnAsync(string id, string cardOrder)
+        public async Task OrderCardInColumnAsync(Guid id, ListCardRequestModel requestModel)
         {
-            throw new NotImplementedException();
+            var column = await _context.Columns.FindAsync(id);
+            if (column == null) return;
+            column.orderCardIds = requestModel.orderCardIds;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ListCard> UpdateTitleColumnAsync(Guid id, string title)

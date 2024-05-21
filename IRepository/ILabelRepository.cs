@@ -8,5 +8,7 @@ namespace trello_services.IRepository
         Task<Label> CreateNewLabelAsync(LabelRequestModel request);
         Task DeleteLabelAsync(Guid labelId);
         Task<Label> UpdateLabelAsync(Guid labelId , LabelRequestModel update);
+        Task<IList<Label>> GetLabelByBoarId (Guid boarId);
+        Task<Label> GetById(Guid labelId);
     }
 }

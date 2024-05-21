@@ -48,5 +48,19 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
+        [HttpPatch("{id}/update-order-card")]
+        public async Task<IActionResult> UpdateOrderdrCards(Guid id , ListCardRequestModel request)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
+                await _columnRepository.OrderCardInColumnAsync(id, request);
+                return NoContent(); 
+
+            }catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        }
     }
 }

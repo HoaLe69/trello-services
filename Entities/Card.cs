@@ -8,9 +8,9 @@
         public string? cover { get; set; }
         public bool? isDueDayComplete { get; set; }
         public Guid columnId { get; set; }
-        public ListCard Column { get; set; }
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
+        public ListCard Column { get; set; }
         public IList<CheckList> CheckLists { get; set; }
         public IList<UserCard> UserCards { get; set; }
         public IList<Activity> Activities { get; set; }

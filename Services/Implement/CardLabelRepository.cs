@@ -26,7 +26,7 @@ namespace trello_services.Services.Implement
 
         public async Task<IList<CardLabel>> GetAllLabelInCardByCardIdAsync(Guid cardId)
         {
-            var labels = await _context.CardLabels.Include(cl => cl.Card)
+            var labels = await _context.CardLabels.Include(cl => cl.Label)
                                                     .Where(cl => cl.cardId == cardId)
                                                     .ToListAsync();
             return labels;

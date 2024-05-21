@@ -58,6 +58,19 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
-
+        [HttpGet("{boardId}/list-labels")]
+        public async Task<IActionResult> GetListLableByBoardId(Guid boardId)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(boardId.ToString())) return BadRequest();
+                var labels = await _labelRepository.GetLabelByBoarId(boardId);
+                return Ok(new { message = "success", data = labels });
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        }
     }
 }

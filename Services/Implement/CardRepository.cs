@@ -91,5 +91,20 @@ namespace trello_services.Services.Implement
             }
             return cards_vm;
         }
+
+        public async Task ChangeListOfCard(Guid cardId, CardRequestModel request)
+        {
+            var card = await _context.Cards.FindAsync(cardId);
+            if (card == null) return;
+            card.columnId = (Guid)request.columnId;
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<Card> GetCardDetail(Guid cardId)
+        {
+            var card_detail = await _context.Cards.FindAsync(cardId);
+            return card_detail;
+        }
     }
 }

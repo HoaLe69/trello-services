@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using trello_services.Data;
+using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
@@ -45,20 +46,20 @@ namespace trello_services.Services.Implement
 
         public async Task<bool> RegisterAsync(UserLoginModel register)
         {
-            await _context.Database.ExecuteSqlInterpolatedAsync($"exec register {register.email},{register.password}");
-            return true;
-            //var user = await _context.Users.Where(user => user.email == register.email)
-            //                                .SingleOrDefaultAsync();
-            //if (user != null) return false;
-            //var _user = new User
-            //{
-            //    userId = Guid.NewGuid(),
-            //    email =  register.email,
-            //    password = PasswordConvert.EncryptPasswordBase64(register.password)
-            //};
-            //await _context.Users.AddAsync(_user);
-            //await _context.SaveChangesAsync();
+            //await _context.Database.ExecuteSqlInterpolatedAsync($"exec register {register.email},{register.password}");
             //return true;
+            var user = await _context.Users.Where(user => user.email == register.email)
+                                            .SingleOrDefaultAsync();
+            if (user != null) return false;
+            var _user = new User
+            {
+                userId = Guid.NewGuid(),
+                email = register.email,
+                password = PasswordConvert.EncryptPasswordBase64(register.password)
+            };
+            await _context.Users.AddAsync(_user);
+            await _context.SaveChangesAsync();
+            return true;
 
         }
 

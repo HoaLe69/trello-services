@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using trello_services.Entities;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
@@ -109,6 +108,37 @@ namespace trello_services.Controllers
             {
                 return ResponseHelper.InternalServerError();
             }
+        }
+        [HttpPatch("{cardId}/change-list-card")]
+        public async Task<IActionResult> ChangeListOfCard( Guid cardId , CardRequestModel request)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(cardId.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
+                await _cardRepository.ChangeListOfCard(cardId , request);
+                return NoContent();
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        }
+        [HttpGet("{id}/detail")]
+        public async Task<IActionResult> GetCardDetail(Guid id)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(id.ToString()))
+                    return BadRequest(new { message = "Card is not exists" });
+                var cards = await _cardRepository.GetCardDetail(id);
+                return Ok(new { success = true, data = cards });
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+
         }
     }
 }

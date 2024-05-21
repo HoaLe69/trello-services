@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using trello_services.Helpers;
 using trello_services.IRepository;
 using trello_services.Models.Request;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace trello_services.Controllers
 {
@@ -43,13 +44,14 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         } 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateBoard(Guid id , string title)
+        [HttpPatch("{id}/update-title")]
+        public async Task<IActionResult> UpdateBoard(Guid id , BoardRequestModel request)
         {
             try 
             {
-                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest(); 
-                return Ok(new { message = "update successfully" , data = await _boardRepository.UpdateTitleBoardAsync(id , title) });
+                if (!ValidGuid.IsValidGuid(id.ToString())) return BadRequest();
+                await _boardRepository.UpdateTitleBoardAsync(id, request);
+                 return NoContent();
             }
             catch
             {
@@ -78,6 +80,20 @@ namespace trello_services.Controllers
                 if (!ValidGuid.IsValidGuid(workspaceId.ToString())) return BadRequest();
                 var boards  = await _boardRepository.GetAllBoardsByWoskspaceIdAsync(workspaceId);
                 return Ok(new {success = true , data = boards});
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        }
+        [HttpPatch("{boardId}/update-order-column")]
+        public async Task<IActionResult> UpdateColumnOrder(Guid boardId , BoardRequestModel request)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid (boardId.ToString())) return BadRequest();
+                await _boardRepository.UpdateOrderColumnInBoard(boardId , request);
+                return NoContent();
             }
             catch
             {
