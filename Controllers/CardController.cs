@@ -32,16 +32,12 @@ namespace trello_services.Controllers
         [HttpGet("{id}/list")]
         public async Task<IActionResult> GetListCardByListId (Guid id)
         {
-            try
-            {
+            
                 if (!ValidGuid.IsValidGuid(id.ToString()))
                     return BadRequest(new { message = "Card is not exists" });
                 var cards = await _cardRepository.GetListCardByListIdAsync(id);
                 return Ok(new { success = true, data = cards });
-            }
-            catch {
-                return ResponseHelper.InternalServerError();
-            }
+            
               
         }
         [HttpPatch("{cardId}/mark-complete-dueday")]

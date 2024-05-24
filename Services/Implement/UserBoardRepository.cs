@@ -44,17 +44,17 @@ namespace trello_services.Services.Implement
             };
         }
 
-        public async Task<IList<UserResponseVM>> GetListUserOfBoardAsync(Guid boardId)
+        public async Task<IList<UserBoard>> GetBoardByUserId(Guid userId)
+        {
+            var boards = await _context.UserBoards.Include(b => b.Board).Where(b =>b.userId  == userId && b.role == Role.Member).ToListAsync();
+            return boards;
+        }
+
+        public async Task<IList<UserBoard>> GetListUserOfBoardAsync(Guid boardId)
         {
             var users = await _context.UserBoards.Include(ub => ub.User)
                                                 .Where(ub => ub.boardId == boardId)
-                                                .Select(s => new UserResponseVM
-                                                {
-                                                    userId = s.userId,
-                                                    avatar_path = s.User.avatar_path,
-                                                    displayName = s.User.displayName,
-                                                    email = s.User.email
-                                                }).ToListAsync();
+                                                .ToListAsync();
             return users;
         }
 

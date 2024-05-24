@@ -8,7 +8,7 @@ namespace trello_services.IRepository
     {
         Task<CardResponseVM> CreateNewCardAsync(CardRequestModel request);
         Task<IList<CardResponseVM>> GetListCardByListIdAsync(Guid listId);
-        Task<Card> GetCardDetail(Guid cardId);
+        Task<CardResponseVM> GetCardDetail(Guid cardId);
         Task ChangeListOfCard(Guid cardId , CardRequestModel request);
         Task<Card> FindCardAsync(Guid cardId);
         Task<Card> UpdateCardAsync(CardRequestModel request , Guid cardId);

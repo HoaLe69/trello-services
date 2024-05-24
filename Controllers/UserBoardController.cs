@@ -36,6 +36,25 @@ namespace trello_services.Controllers
                 return ResponseHelper.InternalServerError();
             }
         }
+        [HttpGet("{userId}/guest-board")]
+        public async Task<IActionResult> GetListGuestBoard(Guid userId)
+        {
+            try
+            {
+                if (!ValidGuid.IsValidGuid(userId.ToString())) return BadRequest();
+                var boards = await _userBoardRepository.GetBoardByUserId(userId);
+                return Ok(new
+                {
+                    message = "success",
+                    data = boards,
+                });
+
+            }
+            catch
+            {
+                return ResponseHelper.InternalServerError();
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> Create(UserBoardRequestModel request)
         {

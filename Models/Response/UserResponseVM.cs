@@ -1,4 +1,6 @@
-﻿namespace trello_services.Models.Response
+﻿using trello_services.Entities;
+
+namespace trello_services.Models.Response
 {
     public class UserResponseVM
     {
