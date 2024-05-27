@@ -12,8 +12,8 @@ using trello_services.Data;
 namespace trello_services.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240518040046_initialMigration")]
-    partial class initialMigration
+    [Migration("20240524135350_initialDB")]
+    partial class initialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

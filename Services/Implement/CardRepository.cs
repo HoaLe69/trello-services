@@ -29,45 +29,15 @@ namespace trello_services.Services.Implement
         }
         public async Task<CardResponseVM> CreateNewCardAsync(CardRequestModel request)
         {
-            Guid isSuccess;
-
-            var isSuccessParameter = new SqlParameter("@isSuccess", SqlDbType.UniqueIdentifier)
+            var card = new Card
             {
-                Direction = ParameterDirection.Output
+                cardId = Guid.NewGuid(),
+                title = request.title,
+                columnId = (Guid)request.columnId,
             };
-
-            await _context.Database.ExecuteSqlRawAsync("EXEC GenerateCard @title, @description, @cover, @columnId, @startDate, @endDate, @isSuccess OUTPUT",
-                new SqlParameter("@title", request.title),
-                new SqlParameter("@description", request.description ?? (object)DBNull.Value),
-                new SqlParameter("@cover", request.cover ?? (object)DBNull.Value),
-                new SqlParameter("@columnId", request.columnId),
-                new SqlParameter("@startDate", (object)DBNull.Value),
-                new SqlParameter("@endDate",  (object)DBNull.Value),
-                isSuccessParameter);
-
-            isSuccess = (Guid)isSuccessParameter.Value;
-            if (isSuccess != null)
-            {
-                return new CardResponseVM
-                {
-                    cardId = isSuccess,
-                    columnId = (Guid)request.columnId,
-                    cover = request.cover,
-                    description = request.description,
-                    title = request.title
-
-                };
-            }
-            return null;
-            //var card = new Card
-            //{
-            //    cardId = Guid.NewGuid(),
-            //    title = request.title,
-            //    columnId = (Guid)request.columnId,
-            //};
-            //await _context.Cards.AddAsync(card);
-            //await _context.SaveChangesAsync();
-            //return _mapper.Map<CardResponseVM>(card);
+            await _context.Cards.AddAsync(card);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CardResponseVM>(card);
         }
 
         public async Task MarkDueDateCompleteOrNotAsync(bool isDueDateComplete, Guid cardId)
@@ -93,29 +63,15 @@ namespace trello_services.Services.Implement
 
         public async Task<Card> UpdateCardAsync(CardRequestModel request , Guid cardId)
         {
-            //var card = await FindCardAsync(cardId);
-            //if (card == null) return null;
-            //if (request.title != null) card.title = request.title;
-            //if (request.description != null) card.description = request.description;
-            //if (request.cover != null) card.cover = request.cover;
-            //if (request.columnId != null) card.columnId = (Guid)request.columnId;
-            //await _context.SaveChangesAsync();
-            //return card;
-            var parameters = new[]
-       {
-            new SqlParameter("@cardId", cardId),
-            new SqlParameter("@title", (object)request.title ?? DBNull.Value),
-            new SqlParameter("@description", (object)request.description ?? DBNull.Value),
-            new SqlParameter("@columnId", (object)request.columnId ?? DBNull.Value)
-        };
-
-           var n =  await _context.Database.ExecuteSqlRawAsync("EXEC UpdateCardInfor @cardId, @title, @description, @columnId", parameters);
-            if (n != null)
-            {
-                return new Card { };
-            }
-            return null;
-        }   
+            var card = await FindCardAsync(cardId);
+            if (card == null) return null;
+            if (request.title != null) card.title = request.title;
+            if (request.description != null) card.description = request.description;
+            if (request.cover != null) card.cover = request.cover;
+            if (request.columnId != null) card.columnId = (Guid)request.columnId;
+            await _context.SaveChangesAsync();
+            return card;
+        }
 
         public async Task<Card> UpdateTimeOfCardAsync(DateTime? starDate, DateTime? endDate, Guid cardId)
         {
@@ -129,25 +85,16 @@ namespace trello_services.Services.Implement
 
         public async Task<IList<CardResponseVM>> GetListCardByListIdAsync(Guid listId)
         {
-            //var cards = await _context.Cards
-            //                           .Include(c => c.Column)
-            //                           .Where(c => c.Column.columnId == listId)
-            //                           .ToArrayAsync();
-            //List<CardResponseVM> cards_vm = new List<CardResponseVM>();
-            //foreach (var card in cards)
-            //{
-            //    cards_vm.Add(_mapper.Map<CardResponseVM>(card));
-            //}
-            //return cards_vm;]
-            var id = new SqlParameter("@listId", listId);
-            var cards = await _context.Cards.FromSqlRaw("EXEC CardDecrypt @listId", id).ToListAsync();
+            var cards = await _context.Cards
+                                       .Include(c => c.Column)
+                                       .Where(c => c.Column.columnId == listId)
+                                       .ToArrayAsync();
             List<CardResponseVM> cards_vm = new List<CardResponseVM>();
             foreach (var card in cards)
             {
                 cards_vm.Add(_mapper.Map<CardResponseVM>(card));
             }
             return cards_vm;
-            //return (IList<CardResponseVM>)cards;
         }
 
         public async Task ChangeListOfCard(Guid cardId, CardRequestModel request)
@@ -159,32 +106,10 @@ namespace trello_services.Services.Implement
 
         }
 
-        public async Task<CardResponseVM> GetCardDetail(Guid cardId)
+        public async Task<Card> GetCardDetail(Guid cardId)
         {
-            //var card_detail = await _context.Cards.FindAsync(cardId);
-            //return card_detail;
-
-            //var id = new SqlParameter("@cardId", cardId);
-            //var cards = await _context.Cards.FromSqlRaw("EXEC CardDetailDecrypt @cardId", id).IgnoreQueryFilters().SingleOrDefaultAsync();
-
-            //return _mapper.Map<CardResponseVM>(cards);
-            var cardIdParam = new SqlParameter("@cardId", cardId);
-            var result = await _context.Cards
-               .FromSqlRaw("EXEC CardDetailDecrypt @cardId", cardIdParam)
-               .ToListAsync();
-            return result.Select(c => new CardResponseVM
-            {
-                cardId = c.cardId,
-                title = c.title,
-                description = c.description,
-                cover = c.cover,
-                columnId = c.columnId,
-                startDate = c.startDate,
-                endDate = c.endDate,
-                isDueDayComplete = c.isDueDayComplete,
-            }).First();
-            
-           // return result;
+            var card_detail = await _context.Cards.FindAsync(cardId);
+            return card_detail;
         }
     }
 }
